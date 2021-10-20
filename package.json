@@ -6,6 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "homepage": "https://github.com/7nohe/pdf-paginator/#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/7nohe/pdf-paginator.git"
+  },
+  "bugs": {
+    "url" : "https://github.com/7nohe/pdf-paginator/issues"
+  },
   "keywords": ["cli", "pdf-paginator"],
   "author": "7nohe",
   "license": "MIT",
