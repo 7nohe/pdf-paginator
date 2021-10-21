@@ -1,7 +1,7 @@
 {
   "name": "pdf-paginator",
-  "version": "1.0.1",
-  "description": "",
+  "version": "1.0.2",
+  "description": "A CLI to add page numbers to a PDF",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
