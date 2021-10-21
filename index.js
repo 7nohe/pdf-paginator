@@ -17,10 +17,14 @@ export const run = async () => {
       alias: "sf",
       description: "skip first page",
       default: false,
-      type: 'boolean'
+      type: "boolean",
     })
     .help().argv;
 
+  if (args._.length < 1) {
+    console.error("You need to provide pdf file.")
+    return;
+  }
   const file = fs.readFileSync(args._[0]);
 
   // Load a PDFDocument from the existing PDF bytes
@@ -32,9 +36,8 @@ export const run = async () => {
   // Get the first page of the document
   const pages = pdfDoc.getPages();
 
-
   pages.forEach((page, index) => {
-    if (args.skipFirst && index == 0) return
+    if (args.skipFirst && index == 0) return;
     // Get the width and height of the page
     const { width, height } = page.getSize();
 
