@@ -6,7 +6,7 @@ export const run = async () => {
   const args = yargs
     .option("_", {
       default: ["./foo.json"],
-      description: "perform some sort of action on this path",
+      description: "input file",
     })
     .option("output", {
       alias: "o",
@@ -19,40 +19,60 @@ export const run = async () => {
       default: false,
       type: "boolean",
     })
+    .option("skip", {
+      alias: "s",
+      description: "number of pages to skip numbering",
+      default: 0,
+      type: "number",
+    })
     .help().argv;
 
   if (args._.length < 1) {
-    console.error("You need to provide pdf file.")
+    console.error("You need to provide pdf file.");
     return;
   }
-  const file = fs.readFileSync(args._[0]);
 
-  // Load a PDFDocument from the existing PDF bytes
-  const pdfDoc = await PDFDocument.load(file);
+  try {
+    const file = fs.readFileSync(args._[0]);
+    // Load a PDFDocument from the existing PDF bytes
+    const pdfDoc = await PDFDocument.load(file);
 
-  // Embed the Helvetica font
-  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    // Embed the Helvetica font
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-  // Get the first page of the document
-  const pages = pdfDoc.getPages();
+    // Get the first page of the document
+    const pages = pdfDoc.getPages();
 
-  pages.forEach((page, index) => {
-    if (args.skipFirst && index == 0) return;
-    // Get the width and height of the page
-    const { width, height } = page.getSize();
+    let skipCount = 0;
+    if (args.skipFirst) {
+      skipCount = 1;
+    }
 
-    // Draw page number
-    page.drawText((index + (args.skipFirst ? 0 : 1)).toString(), {
-      x: width - 15,
-      y: 15,
-      size: 12,
-      font: helveticaFont,
-      color: rgb(0, 0, 0),
+    console.log(args);
+    if (args.skip && Number.isInteger(args.skip)) {
+      skipCount = args.skip;
+    }
+
+    pages.forEach((page, index) => {
+      if (skipCount && index < skipCount) return;
+      // Get the width and height of the page
+      const { width, height } = page.getSize();
+
+      // Draw page number
+      page.drawText((index + 1 - skipCount).toString(), {
+        x: width - 15,
+        y: 15,
+        size: 12,
+        font: helveticaFont,
+        color: rgb(0, 0, 0),
+      });
     });
-  });
 
-  // Serialize the PDFDocument to bytes (a Uint8Array)
-  const pdfBytes = await pdfDoc.save();
+    // Serialize the PDFDocument to bytes (a Uint8Array)
+    const pdfBytes = await pdfDoc.save();
 
-  fs.writeFileSync(args.output, pdfBytes);
+    fs.writeFileSync(args.output, pdfBytes);
+  } catch (e) {
+    console.error(e.message);
+  }
 };

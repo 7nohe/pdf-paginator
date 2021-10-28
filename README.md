@@ -21,13 +21,19 @@ $ npx pdf-paginator [file] [option]
 ### Example
 
 ```
-$ pdf-generator ./input.pdf -o ./ouput.pdf
+$ pdf-paginator ./input.pdf -o ./ouput.pdf
 ```
 
 If you want to skip a first page, `--skip-first` option can be used.
 
 ```
 $ pdf-paginator input.pdf -o output.pdf --skip-first
+```
+
+You also can skip multiple pages by using `--skip` option.
+
+```
+$ pdf-paginator input.pdf -o output.pdf --skip=3
 ```
 
 ## Development
