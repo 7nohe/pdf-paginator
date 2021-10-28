@@ -1,6 +1,18 @@
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import fs from "fs";
 import yargs from "yargs";
+import url from "url";
+import path from "path";
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+function resolveHome(filepath) {
+  if (filepath[0] === '~') {
+      return path.join(process.env.HOME, filepath.slice(1));
+  }
+  return filepath;
+}
 
 export const run = async () => {
   const args = yargs
@@ -48,13 +60,12 @@ export const run = async () => {
       skipCount = 1;
     }
 
-    console.log(args);
     if (args.skip && Number.isInteger(args.skip)) {
       skipCount = args.skip;
     }
 
     pages.forEach((page, index) => {
-      if (skipCount && index < skipCount) return;
+      if (index < skipCount) return;
       // Get the width and height of the page
       const { width, height } = page.getSize();
 
@@ -71,7 +82,9 @@ export const run = async () => {
     // Serialize the PDFDocument to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.save();
 
-    fs.writeFileSync(args.output, pdfBytes);
+    const outpuPath = resolveHome(args.output)
+
+    fs.writeFileSync(outpuPath, pdfBytes);
   } catch (e) {
     console.error(e.message);
   }
