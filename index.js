@@ -8,8 +8,8 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function resolveHome(filepath) {
-  if (filepath[0] === '~') {
-      return path.join(process.env.HOME, filepath.slice(1));
+  if (filepath[0] === "~") {
+    return path.join(process.env.HOME, filepath.slice(1));
   }
   return filepath;
 }
@@ -37,6 +37,17 @@ export const run = async () => {
       default: 0,
       type: "number",
     })
+    .option("side", {
+      alias: "sd",
+      description: "side of page to place page number",
+      default: "right",
+    })
+    .option("offset", {
+      alias: "of",
+      description: "offset of page number from edge",
+      default: 95,
+      type: "number",
+    })
     .help().argv;
 
   if (args._.length < 1) {
@@ -55,6 +66,9 @@ export const run = async () => {
     // Get the first page of the document
     const pages = pdfDoc.getPages();
 
+    // Get the number of pages of the document
+    const totalPages = pdfDoc.getPageCount();
+
     let skipCount = 0;
     if (args.skipFirst) {
       skipCount = 1;
@@ -69,20 +83,28 @@ export const run = async () => {
       // Get the width and height of the page
       const { width, height } = page.getSize();
 
+      let x = width - args.offset;
+      if (args.side === "left") {
+        x = args.offset;
+      }
+
       // Draw page number
-      page.drawText((index + 1 - skipCount).toString(), {
-        x: width - 15,
-        y: 15,
-        size: 12,
-        font: helveticaFont,
-        color: rgb(0, 0, 0),
-      });
+      page.drawText(
+        `Página ${(index + 1 - skipCount).toString()}/${totalPages}`,
+        {
+          x: x,
+          y: 15,
+          size: 12,
+          font: helveticaFont,
+          color: rgb(0, 0, 0),
+        }
+      );
     });
 
     // Serialize the PDFDocument to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.save();
 
-    const outpuPath = resolveHome(args.output)
+    const outpuPath = resolveHome(args.output);
 
     fs.writeFileSync(outpuPath, pdfBytes);
   } catch (e) {
