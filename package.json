@@ -12,9 +12,12 @@
     "url": "https://github.com/7nohe/pdf-paginator.git"
   },
   "bugs": {
-    "url" : "https://github.com/7nohe/pdf-paginator/issues"
+    "url": "https://github.com/7nohe/pdf-paginator/issues"
   },
-  "keywords": ["cli", "pdf-paginator"],
+  "keywords": [
+    "cli",
+    "pdf-paginator"
+  ],
   "author": "7nohe",
   "license": "MIT",
   "dependencies": {

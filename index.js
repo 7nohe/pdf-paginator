@@ -90,7 +90,7 @@ export const run = async () => {
 
       // Draw page number
       page.drawText(
-        `Página ${(index + 1 - skipCount).toString()}/${totalPages}`,
+        `${(index + 1 - skipCount).toString()}/${totalPages}`,
         {
           x: x,
           y: 15,
