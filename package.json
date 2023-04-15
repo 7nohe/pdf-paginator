@@ -4,7 +4,7 @@
   "description": "A CLI to add page numbers to a PDF",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "release": "npx git-ensure -a && npx bumpp --commit --tag --push"
   },
   "homepage": "https://github.com/7nohe/pdf-paginator/#readme",
   "repository": {
