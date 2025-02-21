@@ -15,7 +15,7 @@ function resolveHome(filepath) {
 }
 
 export const run = async () => {
-  const args = yargs
+  const args = yargs(process.argv.slice(2))
     .option("_", {
       default: ["./foo.json"],
       description: "input file",

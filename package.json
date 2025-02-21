@@ -21,7 +21,6 @@
   "author": "7nohe",
   "license": "MIT",
   "dependencies": {
-    "esm": "^3.2.25",
     "pdf-lib": "^1.17.0",
     "yargs": "^17.2.1"
   },
